@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Estudio JW">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Estudio JW 2026</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f4f3ef;
+  --surface:#ffffff;
+  --surface2:#f0efe9;
+  --border:rgba(0,0,0,.09);
+  --border-mid:rgba(0,0,0,.18);
+  --text:#181814;
+  --text-muted:#6b6b62;
+  --text-faint:#a0a097;
+  --green:#3B6D11;
+  --green-bg:#eaf3de;
+  --green-text:#27500a;
+  --amber:#855008;
+  --amber-bg:#faeeda;
+  --blue:#185FA5;
+  --blue-bg:#e6f1fb;
+  --blue-border:rgba(55,138,221,.35);
+  --radius:12px;
+  --radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.08);
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#111110;
+    --surface:#1c1c1a;
+    --surface2:#242421;
+    --border:rgba(255,255,255,.08);
+    --border-mid:rgba(255,255,255,.16);
+    --text:#eeede8;
+    --text-muted:#9b9b92;
+    --text-faint:#5e5e58;
+    --green:#97C459;
+    --green-bg:#17290a;
+    --green-text:#c0dd97;
+    --amber:#FAC775;
+    --amber-bg:#27190a;
+    --blue:#85B7EB;
+    --blue-bg:#0a1e35;
+    --blue-border:rgba(133,183,235,.3);
+    --shadow:0 1px 3px rgba(0,0,0,.3);
+  }
+}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  font-size:15px;
+  line-height:1.5;
+}
+.app{max-width:580px;margin:0 auto;padding:16px 16px 48px}
+
+/* Header */
+.header{padding:20px 0 18px;border-bottom:1px solid var(--border);margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.header-icon{width:40px;height:40px;border-radius:10px;background:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.header-icon svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.header h1{font-size:18px;font-weight:600;color:var(--text);line-height:1.2}
+.header p{font-size:12px;color:var(--text-muted);margin-top:1px}
+
+/* Stats */
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 13px}
+.stat-label{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--text-faint);display:block;margin-bottom:5px}
+.stat-value{font-size:21px;font-weight:600;color:var(--text);line-height:1;display:block}
+.stat-value.accent{color:var(--green)}
+
+/* Next incomplete */
+.next-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.next-icon{font-size:16px;flex-shrink:0}
+.next-label{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-faint)}
+.next-value{font-size:13px;color:var(--text);font-weight:500;margin-top:1px}
+
+/* Progress */
+.progress-wrap{margin-bottom:20px}
+.progress-track{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:5px}
+.progress-fill{height:100%;background:var(--green);border-radius:3px;transition:width .5s cubic-bezier(.4,0,.2,1);width:0%}
+.progress-label{font-size:11px;color:var(--text-faint);text-align:right}
+
+/* Section */
+.section-label{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--text-faint);margin-bottom:8px;padding:0 2px}
+
+/* Week rows */
+.week-list{display:flex;flex-direction:column;gap:4px}
+.week-row{
+  display:flex;align-items:center;gap:9px;
+  padding:10px 12px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  transition:border-color .15s,opacity .15s;
+}
+.week-row.is-current{border-color:var(--blue-border);background:var(--blue-bg)}
+.week-row.is-assembly{background:var(--surface2)}
+.week-row.is-past{opacity:.45}
+
+/* Status dot */
+.dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;background:var(--border-mid);transition:background .2s}
+.dot.partial{background:var(--amber)}
+.dot.full{background:var(--green)}
+
+/* Week date */
+.week-date{font-size:13px;color:var(--text);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* Badges */
+.badge{font-size:10px;font-weight:500;padding:2px 8px;border-radius:20px;white-space:nowrap;flex-shrink:0;letter-spacing:.02em}
+.badge-cur{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border)}
+.badge-asm{background:var(--surface2);color:var(--text-faint);border:1px solid var(--border)}
+
+/* Checkboxes */
+.checks{display:flex;gap:14px;flex-shrink:0}
+.chk{display:flex;align-items:center;gap:5px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;padding:2px 0}
+.chk input[type=checkbox]{width:17px;height:17px;cursor:pointer;accent-color:var(--green);flex-shrink:0;border-radius:4px}
+.chk-text{font-size:12px;color:var(--text-muted);transition:color .15s}
+.chk.is-checked .chk-text{color:var(--green);font-weight:500}
+
+.asm-note{font-size:12px;color:var(--text-faint);font-style:italic}
+
+/* Footer */
+.footer{text-align:center;padding-top:32px;font-size:12px;color:var(--text-faint);line-height:1.8}
+.footer a{color:var(--text-faint);text-decoration:underline;text-underline-offset:2px}
+
+/* Responsive tweaks */
+@media(max-width:380px){
+  .stats{grid-template-columns:1fr 1fr;gap:7px}
+  .stat-value{font-size:18px}
+  .checks{gap:10px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <div class="header-icon">
+      <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="15" y2="11"/></svg>
+    </div>
+    <div>
+      <h1>Estudio JW 2026</h1>
+      <p>Guías de actividades · Atalayas · Mayo–Noviembre</p>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <span class="stat-label">Colchón</span>
+      <span class="stat-value accent" id="s-cushion">—</span>
+    </div>
+    <div class="stat">
+      <span class="stat-label">Completas</span>
+      <span class="stat-value" id="s-done">—</span>
+    </div>
+    <div class="stat">
+      <span class="stat-label">Avance</span>
+      <span class="stat-value" id="s-pct">—</span>
+    </div>
+  </div>
+
+  <div class="next-card">
+    <span class="next-icon">📌</span>
+    <div>
+      <div class="next-label">Próxima sin estudiar</div>
+      <div class="next-value" id="s-next">—</div>
+    </div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-track">
+      <div class="progress-fill" id="prog-fill"></div>
+    </div>
+    <div class="progress-label" id="prog-label">cargando...</div>
+  </div>
+
+  <div class="section-label">Semanas</div>
+  <div class="week-list" id="week-list"></div>
+
+  <div class="footer">
+    Los datos se guardan en este dispositivo.<br>
+    Abrí este archivo en cualquier navegador.<br>
+    En el celular: <strong>Compartir → Agregar a pantalla de inicio</strong><br><br>
+    Semanas publicadas hasta el 1 de noviembre de 2026.<br>
+    Cuando necesites actualizar el archivo con semanas nuevas,<br>
+    <a href="https://claude.ai/chat/3cc3b4a0-6e25-4a6e-94d9-1b20873847bb" target="_blank">volvé a esta conversación →</a>
+  </div>
+
+</div>
+
+<script>
+const WEEKS = [
+  {id:'w0518',s:'2026-05-18',lbl:'18–24 may',asm:true},
+  {id:'w0525',s:'2026-05-25',lbl:'25–31 may'},
+  {id:'w0601',s:'2026-06-01',lbl:'1–7 jun'},
+  {id:'w0608',s:'2026-06-08',lbl:'8–14 jun'},
+  {id:'w0615',s:'2026-06-15',lbl:'15–21 jun'},
+  {id:'w0622',s:'2026-06-22',lbl:'22–28 jun'},
+  {id:'w0629',s:'2026-06-29',lbl:'29 jun – 5 jul'},
+  {id:'w0706',s:'2026-07-06',lbl:'6–12 jul'},
+  {id:'w0713',s:'2026-07-13',lbl:'13–19 jul'},
+  {id:'w0720',s:'2026-07-20',lbl:'20–26 jul'},
+  {id:'w0727',s:'2026-07-27',lbl:'27 jul – 2 ago'},
+  {id:'w0803',s:'2026-08-03',lbl:'3–9 ago'},
+  {id:'w0810',s:'2026-08-10',lbl:'10–16 ago'},
+  {id:'w0817',s:'2026-08-17',lbl:'17–23 ago'},
+  {id:'w0824',s:'2026-08-24',lbl:'24–30 ago'},
+  {id:'w0831',s:'2026-08-31',lbl:'31 ago – 6 sep'},
+  {id:'w0907',s:'2026-09-07',lbl:'7–13 sep'},
+  {id:'w0914',s:'2026-09-14',lbl:'14–20 sep'},
+  {id:'w0921',s:'2026-09-21',lbl:'21–27 sep'},
+  {id:'w0928',s:'2026-09-28',lbl:'28 sep – 4 oct'},
+  {id:'w1005',s:'2026-10-05',lbl:'5–11 oct'},
+  {id:'w1012',s:'2026-10-12',lbl:'12–18 oct'},
+  {id:'w1019',s:'2026-10-19',lbl:'19–25 oct'},
+  {id:'w1026',s:'2026-10-26',lbl:'26 oct – 1 nov'},
+];
+
+const NON_ASM = WEEKS.filter(w => !w.asm);
+
+function parseDate(s) {
+  const [y,m,d] = s.split('-');
+  return new Date(+y, +m-1, +d);
+}
+
+function getMonday(date) {
+  const d = new Date(date);
+  const day = d.getDay();
+  d.setDate(d.getDate() - (day === 0 ? 6 : day - 1));
+  d.setHours(0,0,0,0);
+  return d;
+}
+
+const TODAY = new Date();
+TODAY.setHours(0,0,0,0);
+const CUR_MON = getMonday(TODAY);
+const NEXT_MON = new Date(CUR_MON);
+NEXT_MON.setDate(NEXT_MON.getDate() + 7);
+
+function load() {
+  try { const d = localStorage.getItem('jw-2026'); return d ? JSON.parse(d) : {}; }
+  catch(e) { return {}; }
+}
+
+function save(st) {
+  try { localStorage.setItem('jw-2026', JSON.stringify(st)); }
+  catch(e) {}
+}
+
+let ST = load();
+
+function calcStats() {
+  let done = 0, cushion = 0, streak = true, nextInc = null;
+  for (const w of NON_ASM) {
+    const ws = parseDate(w.s);
+    const s = ST[w.id] || {};
+    const ok = !!(s.g && s.a);
+    if (ok) done++;
+    if (ws >= NEXT_MON) {
+      if (streak && ok) cushion++;
+      else streak = false;
+      if (!ok && !nextInc) {
+        const p = [];
+        if (!s.g) p.push('guía');
+        if (!s.a) p.push('atalaya');
+        nextInc = w.lbl + (p.length < 2 ? ' — falta ' + p[0] : '');
+      }
+    }
+  }
+  return { done, cushion, total: NON_ASM.length, nextInc };
+}
+
+function render() {
+  const { done, cushion, total, nextInc } = calcStats();
+  const pct = Math.round(done / total * 100);
+
+  const cushEl = document.getElementById('s-cushion');
+  cushEl.textContent = cushion;
+  cushEl.style.color = cushion >= 3 ? 'var(--green)' : cushion >= 1 ? 'var(--amber)' : 'var(--text-muted)';
+
+  document.getElementById('s-done').textContent = done + ' / ' + total;
+  document.getElementById('s-pct').textContent = pct + '%';
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-label').textContent = done + ' de ' + total + ' semanas completas (' + pct + '%)';
+  document.getElementById('s-next').textContent = nextInc || '¡Todo al día!';
+
+  const list = document.getElementById('week-list');
+  list.innerHTML = '';
+
+  for (const w of WEEKS) {
+    const ws = parseDate(w.s);
+    const we = new Date(ws); we.setDate(we.getDate() + 7);
+    const isCur = ws >= CUR_MON && ws < new Date(CUR_MON.getTime() + 7 * 86400000);
+    const isPast = we <= TODAY && !isCur;
+    const s = ST[w.id] || {};
+    const n = (s.g ? 1 : 0) + (s.a ? 1 : 0);
+
+    const row = document.createElement('div');
+    row.className = 'week-row'
+      + (isCur ? ' is-current' : '')
+      + (w.asm ? ' is-assembly' : '')
+      + (isPast ? ' is-past' : '');
+
+    let dotCls = w.asm ? '' : n === 2 ? 'full' : n === 1 ? 'partial' : '';
+
+    row.innerHTML = '<div class="dot ' + dotCls + '"></div>'
+      + '<span class="week-date">' + w.lbl + '</span>'
+      + (isCur ? '<span class="badge badge-cur">esta semana</span>' : '')
+      + (w.asm ? '<span class="badge badge-asm">asamblea</span>' : '')
+      + (!w.asm
+        ? '<div class="checks">'
+            + '<label class="chk' + (s.g ? ' is-checked' : '') + '">'
+            + '<input type="checkbox" data-id="' + w.id + '" data-t="g"' + (s.g ? ' checked' : '') + '>'
+            + '<span class="chk-text">guía</span></label>'
+            + '<label class="chk' + (s.a ? ' is-checked' : '') + '">'
+            + '<input type="checkbox" data-id="' + w.id + '" data-t="a"' + (s.a ? ' checked' : '') + '>'
+            + '<span class="chk-text">atalaya</span></label>'
+            + '</div>'
+        : '<span class="asm-note">sin reuniones</span>');
+
+    list.appendChild(row);
+  }
+
+  list.querySelectorAll('input[type=checkbox]').forEach(cb => {
+    cb.addEventListener('change', e => {
+      const { id, t } = e.target.dataset;
+      if (!ST[id]) ST[id] = {};
+      ST[id][t] = e.target.checked;
+      save(ST);
+      render();
+    });
+  });
+}
+
+render();
+</script>
+</body>
+</html>
